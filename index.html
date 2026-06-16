@@ -159,6 +159,19 @@
       font-size: 22px;
       font-weight: 900;
       box-shadow: 0 14px 28px rgba(28, 36, 48, 0.22);
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .hub:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 18px 34px rgba(28, 36, 48, 0.26);
+    }
+
+    .hub:disabled {
+      cursor: wait;
+      opacity: 0.72;
+      transform: none;
     }
 
     .panel {
@@ -388,7 +401,7 @@
         <div class="wheel-shell">
           <svg class="wheel" id="wheel" viewBox="0 0 200 200" role="img" aria-label="晚餐随机转盘"></svg>
         </div>
-        <div class="hub">开饭</div>
+        <button class="hub" id="hub-spin" type="button" aria-label="点击开饭开始转盘">开饭</button>
       </div>
     </section>
 
@@ -448,6 +461,7 @@
     const currentFoods = document.querySelector("#current-foods");
     const result = document.querySelector("#result");
     const spinButton = document.querySelector("#spin");
+    const hubSpinButton = document.querySelector("#hub-spin");
     const shuffleButton = document.querySelector("#shuffle");
     const modal = document.querySelector("#modal");
     const modalTitle = document.querySelector("#modal-title");
@@ -570,6 +584,7 @@
 
       spinning = true;
       spinButton.disabled = true;
+      hubSpinButton.disabled = true;
       shuffleButton.disabled = true;
       result.textContent = "转动中...";
 
@@ -588,6 +603,7 @@
         showModal(foods[actualWinner]);
         spinning = false;
         spinButton.disabled = false;
+        hubSpinButton.disabled = false;
         shuffleButton.disabled = false;
       }, 4300);
     }
@@ -605,6 +621,7 @@
 
     customFoodInput.addEventListener("input", renderWheel);
     spinButton.addEventListener("click", spinWheel);
+    hubSpinButton.addEventListener("click", spinWheel);
     shuffleButton.addEventListener("click", shufflePreset);
     closeModal.addEventListener("click", hideModal);
     modal.addEventListener("click", (event) => {
