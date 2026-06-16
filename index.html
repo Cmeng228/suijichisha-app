@@ -203,13 +203,6 @@
       line-height: 1.1;
     }
 
-    .actions {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      margin-bottom: 22px;
-    }
-
     button {
       min-height: 48px;
       border: 0;
@@ -228,19 +221,6 @@
       cursor: wait;
       opacity: 0.62;
       transform: none;
-    }
-
-    .spin {
-      color: #fff;
-      background: var(--accent);
-      box-shadow: 0 14px 28px rgba(233, 79, 55, 0.28);
-    }
-
-    .shuffle {
-      width: 54px;
-      color: #fff;
-      background: var(--accent-2);
-      font-size: 22px;
     }
 
     label {
@@ -411,11 +391,6 @@
         <strong id="result">先转一下</strong>
       </div>
 
-      <div class="actions">
-        <button class="spin" id="spin" type="button">开始转盘</button>
-        <button class="shuffle" id="shuffle" type="button" title="随机换一组">↻</button>
-      </div>
-
       <div class="custom-row">
         <label for="custom-food">想自己加一个</label>
         <input id="custom-food" type="text" maxlength="16" placeholder="比如：烤冷面">
@@ -460,9 +435,7 @@
     const customFoodInput = document.querySelector("#custom-food");
     const currentFoods = document.querySelector("#current-foods");
     const result = document.querySelector("#result");
-    const spinButton = document.querySelector("#spin");
     const hubSpinButton = document.querySelector("#hub-spin");
-    const shuffleButton = document.querySelector("#shuffle");
     const modal = document.querySelector("#modal");
     const modalTitle = document.querySelector("#modal-title");
     const closeModal = document.querySelector("#close-modal");
@@ -572,7 +545,7 @@
 
     function hideModal() {
       modal.classList.remove("is-open");
-      spinButton.focus();
+      hubSpinButton.focus();
     }
 
     function spinWheel() {
@@ -583,9 +556,7 @@
       }
 
       spinning = true;
-      spinButton.disabled = true;
       hubSpinButton.disabled = true;
-      shuffleButton.disabled = true;
       result.textContent = "转动中...";
 
       const slice = 360 / foods.length;
@@ -602,27 +573,12 @@
         result.textContent = foods[actualWinner];
         showModal(foods[actualWinner]);
         spinning = false;
-        spinButton.disabled = false;
         hubSpinButton.disabled = false;
-        shuffleButton.disabled = false;
       }, 4300);
     }
 
-    function shufflePreset() {
-      if (spinning) return;
-      const shuffled = [...foodPool].sort(() => Math.random() - 0.5);
-      currentMenu = shuffled;
-      paletteIndex += 1;
-      rotation = 0;
-      wheel.style.transform = "rotate(0deg)";
-      result.textContent = "先转一下";
-      renderWheel();
-    }
-
     customFoodInput.addEventListener("input", renderWheel);
-    spinButton.addEventListener("click", spinWheel);
     hubSpinButton.addEventListener("click", spinWheel);
-    shuffleButton.addEventListener("click", shufflePreset);
     closeModal.addEventListener("click", hideModal);
     modal.addEventListener("click", (event) => {
       if (event.target === modal) hideModal();
